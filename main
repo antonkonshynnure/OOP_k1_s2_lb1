@@ -1,32 +1,32 @@
 #include <iostream>
 using namespace std;
-class Drob
+class Transactions
 {
 private:
     double rs;//razmer summy
     double kv;//kod valuty
     double kpokd;//kurs po otnosheniyu k dollaru
+    Transactions ToDollar();
 public:
     //#
     //###
     //###### - _ Constructors _ - #######
     //###
     //#
-    Drob(double, double, double);//+
-    Drob(double, double);//+
-    Drob(double);//+
-    Drob();//+
-    Drob(Drob&);//+
+    Transactions(double, double, double);
+    Transactions(double, double);
+    Transactions(double);
+    Transactions();
+    Transactions(Transactions&);
     //#
     //###
     //###### - _ Main methods _ - #######
     //###
     //#
-    void Print() const;//+
-    void Input();//+
-    Drob Add(Drob);//
-    bool Equal(Drob) const;//
-    Drob ToDollar();
+    void Print() const;
+    void Input();
+    Transactions Add(Transactions);
+    bool isEqual(Transactions) const;
     //#
     //###
     //###### - _ SetOrGetParametrs _ - #######
@@ -45,32 +45,32 @@ public:
 //###### - _ Constructors _ - #######
 
 //###################################
-Drob::Drob(double d1, double d2, double d3)
+Transactions::Transactions(double d1, double d2, double d3)
 {
     rs = d1;
     kv = d2;
     kpokd = d3;
 }
-Drob::Drob(double d1, double d2)
+Transactions::Transactions(double d1, double d2)
 {
     rs = 0;
     kv = d1;
     kpokd = d2;
 }
-Drob::Drob(double d1)
+Transactions::Transactions(double d1)
 {
     rs = d1;
     kv = 980;
     kpokd = 0.036;
 }
 
-Drob::Drob(){
+Transactions::Transactions(){
 
     rs = 0;
     kv = 980;
     kpokd = 0.036;
 }
-Drob::Drob(Drob& d)
+Transactions::Transactions(Transactions& d)
 {
     rs = d.rs;
     kv = d.kv;
@@ -83,43 +83,56 @@ Drob::Drob(Drob& d)
 
 //###################################
 
-void Drob::Input()
+void Transactions::Input()
 {
     cin>>rs>>kv>>kpokd;
     if (kpokd<0)abort();
 }
 
 
-void Drob::Print() const
+void Transactions::Print() const
 {
     cout << rs << "\t" << kv << "\t" << kpokd << endl;
 }
 
 
-Drob Drob::Add(Drob d2)
+Transactions Transactions::Add(Transactions d2)
 {
-    Drob d;
-    d.kv=840;
-    d.rs = rs + d2.rs;
-    d.kpokd = 0.036;
+    Transactions d(rs, kv, kpokd);
+    if(kv==d2.kv || kpokd==d2.kpokd)
+    {
+        d.rs += d2.rs;
+        return d;
+    }
+    d.ToDollar();
+    d2.ToDollar();
+    d.rs += d2.rs;
     return d;
 }
 
 
-Drob Drob::ToDollar()
+Transactions Transactions::ToDollar()
 {
-    Drob d;
+    Transactions d;
     d.kv=840;
     d.rs = rs * kpokd;
-    d.kpokd = 0.036;
+    d.kpokd = 1;
     return d;
 }
 
 
-bool Drob::Equal(Drob d) const
+bool Transactions::isEqual(Transactions d1) const
 {
-    if (rs == d.rs)return true;
-    else return false;
+    if(kv==d1.kv || kpokd==d1.kpokd)
+    {
+        if (rs == d1.rs)return true;
+        return false;
+    }
+    Transactions d(rs, kv, kpokd);
+    d.ToDollar();
+    d1.ToDollar();
+    if (d.rs == d1.rs)return true;
+    return false;
 };
 
 
@@ -132,40 +145,40 @@ bool Drob::Equal(Drob d) const
 
 //SetOrGet kpokd
 
-void Drob::setkpokd(double kpokd)
+void Transactions::setkpokd(double kpokd)
 {
 this->kpokd = kpokd;
 }
-double Drob::getkpokd()
+double Transactions::getkpokd()
 {
 return kpokd;
 }
 
 //SetOrGet kv
 
-void Drob::setkv(double kv)
+void Transactions::setkv(double kv)
 {
 this->kv = kv;
 }
-double Drob::getkv()
+double Transactions::getkv()
 {
 return kv;
 }
 
 //SetOrGet rs
 
-void Drob::setrs(double rs)
+void Transactions::setrs(double rs)
 {
 this->rs = rs;
 }
-double Drob::getrs()
+double Transactions::getrs()
 {
 return rs;
 }
 
 
 int main(){
-    Drob d1, d2(2), d3, d4(d1), d5(1, 7), d6(11, 312, 57);
+    Transactions d1, d2(2), d3, d4(d1), d5(1, 7), d6(11, 312, 57);
     d1.Print();//print autofill parametrs
     d2.Print();//print 1 inputed inside to code and 2 autofill parametrs
     d5.Print();//print 2 inputed inside to code and 1 autofill parametrs
@@ -175,9 +188,5 @@ int main(){
     d4.Print();//print cloned parametrs
     d3=d1.Add(d2);//d3 = d2 added to d1
     d3.Print();//print summary
-    d3=d1.ToDollar();//d3 = d1 converted to dollar
-    d3.Print();//print d3 to a user
-    d1=d1.ToDollar();//d1 = d1 converted to dollar
-    d1.Print();//print d1 to a user
-    cout<<d1.Equal(d3);//if d1>d3 print(1) else => print(0)
+    cout<<d1.isEqual(d3);//if d1>d3 print(1) else => print(0)
 }
