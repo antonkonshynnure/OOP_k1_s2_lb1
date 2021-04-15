@@ -1,0 +1,183 @@
+#include <iostream>
+using namespace std;
+class Drob
+{
+private:
+    double rs;//razmer summy
+    double kv;//kod valuty
+    double kpokd;//kurs po otnosheniyu k dollaru
+public:
+    //#
+    //###
+    //###### - _ Constructors _ - #######
+    //###
+    //#
+    Drob(double, double, double);//+
+    Drob(double, double);//+
+    Drob(double);//+
+    Drob();//+
+    Drob(Drob&);//+
+    //#
+    //###
+    //###### - _ Main methods _ - #######
+    //###
+    //#
+    void Print() const;//+
+    void Input();//+
+    Drob Add(Drob);//
+    bool Equal(Drob) const;//
+    Drob ToDollar();
+    //#
+    //###
+    //###### - _ SetOrGetParametrs _ - #######
+    //###
+    //#
+    void setrs(double);
+    void setkv(double);
+    void setkpokd(double);
+    double getrs();
+    double getkv();
+    double getkpokd();
+    
+};
+//###################################
+
+//###### - _ Constructors _ - #######
+
+//###################################
+Drob::Drob(double d1, double d2, double d3)
+{
+    rs = d1;
+    kv = d2;
+    kpokd = d3;
+}
+Drob::Drob(double d1, double d2)
+{
+    rs = 0;
+    kv = d1;
+    kpokd = d2;
+}
+Drob::Drob(double d1)
+{
+    rs = d1;
+    kv = 980;
+    kpokd = 0.036;
+}
+
+Drob::Drob(){
+
+    rs = 0;
+    kv = 980;
+    kpokd = 0.036;
+}
+Drob::Drob(Drob& d)
+{
+    rs = d.rs;
+    kv = d.kv;
+    kpokd = d.kpokd;
+}
+
+//###################################
+
+//###### - _ Main methods _ - #######
+
+//###################################
+
+void Drob::Input()
+{
+    cin>>rs>>kv>>kpokd;
+    if (kpokd<0)abort();
+}
+
+
+void Drob::Print() const
+{
+    cout << rs << "\t" << kv << "\t" << kpokd << endl;
+}
+
+
+Drob Drob::Add(Drob d2)
+{
+    Drob d;
+    d.kv=840;
+    d.rs = rs + d2.rs;
+    d.kpokd = 0.036;
+    return d;
+}
+
+
+Drob Drob::ToDollar()
+{
+    Drob d;
+    d.kv=840;
+    d.rs = rs * kpokd;
+    d.kpokd = 0.036;
+    return d;
+}
+
+
+bool Drob::Equal(Drob d) const
+{
+    if (rs == d.rs)return true;
+    else return false;
+};
+
+
+//########################################
+
+//###### - _ SetOrGetParametrs _ - #######
+
+//########################################
+
+
+//SetOrGet kpokd
+
+void Drob::setkpokd(double kpokd)
+{
+this->kpokd = kpokd;
+}
+double Drob::getkpokd()
+{
+return kpokd;
+}
+
+//SetOrGet kv
+
+void Drob::setkv(double kv)
+{
+this->kv = kv;
+}
+double Drob::getkv()
+{
+return kv;
+}
+
+//SetOrGet rs
+
+void Drob::setrs(double rs)
+{
+this->rs = rs;
+}
+double Drob::getrs()
+{
+return rs;
+}
+
+
+int main(){
+    Drob d1, d2(2), d3, d4(d1), d5(1, 7), d6(11, 312, 57);
+    d1.Print();//print autofill parametrs
+    d2.Print();//print 1 inputed inside to code and 2 autofill parametrs
+    d5.Print();//print 2 inputed inside to code and 1 autofill parametrs
+    d6.Print();//print 3 inputed inside to code parametrs
+    d3.Input();//input parametrs
+    d3.Print();//print inputed parametrs
+    d4.Print();//print cloned parametrs
+    d3=d1.Add(d2);//d3 = d2 added to d1
+    d3.Print();//print summary
+    d3=d1.ToDollar();//d3 = d1 converted to dollar
+    d3.Print();//print d3 to a user
+    d1=d1.ToDollar();//d1 = d1 converted to dollar
+    d1.Print();//print d1 to a user
+    cout<<d1.Equal(d3);//if d1>d3 print(1) else => print(0)
+}
