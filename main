@@ -99,7 +99,7 @@ void Transactions::Print() const
 Transactions Transactions::Add(Transactions d2)
 {
     Transactions d(rs, kv, kpokd);
-    if(kv==d2.kv || kpokd==d2.kpokd)
+    if(kv==d2.kv)
     {
         d.rs += d2.rs;
         return d;
